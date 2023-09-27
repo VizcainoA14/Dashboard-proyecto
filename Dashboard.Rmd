@@ -8,20 +8,12 @@ output:
 
 ```{r setup, include=FALSE}
 
-
-
-
 library(flexdashboard)
 library(readxl)
 library(tidyverse)
 library(plotly)
 
-
-
-
 Data <- read_excel("Data.xlsx")
-BD <- read_excel("Data.xlsx")
-
 
 # Calculo del numero de muestra
 
@@ -30,47 +22,42 @@ n <- round(n)
 # Tamaño de meustra para proporciones
 
 
+set.seed(00065280) # Establecer una semilla para reproducibilidad
+tamano_muestra <- n # Reemplaza 'n' con el tamaño deseado de la muestra
+Muestra <- Data[sample(nrow(Data), tamano_muestra), ]
+
+
 # Muestreo aleatorio
 library(zoo)
 
 # Reemplazar NA por la mediana en variables numéricas
-BD$appeared <- na.aggregate(BD$appeared, FUN = median)
-BD$lastActivity <- na.aggregate(BD$lastActivity, FUN = median)
-BD$numberOfUsers <- na.aggregate(BD$numberOfUsers, FUN = median)
+Muestra$appeared <- na.aggregate(Muestra$appeared, FUN = median)
+Muestra$lastActivity <- na.aggregate(Muestra$lastActivity, FUN = median)
+Muestra$numberOfUsers <- na.aggregate(Muestra$numberOfUsers, FUN = median)
 
 # Reemplazar NA por la moda en variables categóricas
 Mode <- function(x) {
   uniq_x <- unique(x)
   uniq_x[which.max(tabulate(match(x, uniq_x)))]
 }
-BD$type <- na.aggregate(BD$type, FUN = function(x) Mode(x)[1])
-BD$website <- na.aggregate(BD$website, FUN = function(x) Mode(x)[1])
-BD$country <- na.aggregate(BD$country, FUN = function(x) Mode(x)[1])
-
-set.seed(00065280) # Establecer una semilla para reproducibilidad
-tamano_muestra <- n # Reemplaza 'n' con el tamaño deseado de la muestra
-Muestra <- BD[sample(nrow(BD), tamano_muestra), ]
+Muestra$type <- na.aggregate(Muestra$type, FUN = function(x) Mode(x)[1])
+Muestra$website <- na.aggregate(Muestra$website, FUN = function(x) Mode(x)[1])
+Muestra$country <- na.aggregate(Muestra$country, FUN = function(x) Mode(x)[1])
 
 ```
 
-APPEARED
+APPEARED 
 ==============
 
-Column {data-width=600}
+
+Rows {data-width=650, .tabset}
 -----------------------------------------------------------------------
 ### Histogram
 ```{r}
-p = ggplot(data = Muestra, aes(x = appeared))+ geom_histogram(bins = 20)
+p = ggplot(data = Muestra, aes(x = appeared)) + geom_histogram(bins = 20)
 fig = ggplotly(p)
 fig
 ```
-Column {data-width=400}
---------------
-### Chart B
-
-```{r}
-
-```
 
 
 ### Chart B
@@ -79,3 +66,23 @@ Column {data-width=400}
 
 ```
 
+
+### Chart B
+
+```{r}
+
+```
+Rows {data-width=650}
+---------------
+### Chart x
+
+```{r}
+
+```
+
+ 
+### Chart y
+
+```{r}
+
+```
