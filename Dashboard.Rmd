@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Tecnologias, herramientas y lenguajes de programacion 1960-2023"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -7,30 +7,73 @@ output:
 ---
 
 ```{r setup, include=FALSE}
+
+
+
+
 library(flexdashboard)
 library(readxl)
+library(tidyverse)
+library(plotly)
+
+
+
+
 Data <- read_excel("Data.xlsx")
+BD <- read_excel("Data.xlsx")
+
+
+# Calculo del numero de muestra
+
+n <- ((1.96**2) * ((1336/3989) * (1 - (1336/3989)))) / 0.02**2
+n <- round(n)
+# Tamaño de meustra para proporciones
+
+
+# Muestreo aleatorio
+library(zoo)
+
+# Reemplazar NA por la mediana en variables numéricas
+BD$appeared <- na.aggregate(BD$appeared, FUN = median)
+BD$lastActivity <- na.aggregate(BD$lastActivity, FUN = median)
+BD$numberOfUsers <- na.aggregate(BD$numberOfUsers, FUN = median)
+
+# Reemplazar NA por la moda en variables categóricas
+Mode <- function(x) {
+  uniq_x <- unique(x)
+  uniq_x[which.max(tabulate(match(x, uniq_x)))]
+}
+BD$type <- na.aggregate(BD$type, FUN = function(x) Mode(x)[1])
+BD$website <- na.aggregate(BD$website, FUN = function(x) Mode(x)[1])
+BD$country <- na.aggregate(BD$country, FUN = function(x) Mode(x)[1])
+
+set.seed(00065280) # Establecer una semilla para reproducibilidad
+tamano_muestra <- n # Reemplaza 'n' con el tamaño deseado de la muestra
+Muestra <- BD[sample(nrow(BD), tamano_muestra), ]
+
 ```
 
-Column {data-width=650}
+APPEARED
+==============
+
+Column {data-width=600}
 -----------------------------------------------------------------------
-
-### Chart A
-
+### Histogram
 ```{r}
-
+p = ggplot(data = Muestra, aes(x = appeared))+ geom_histogram(bins = 20)
+fig = ggplotly(p)
+fig
 ```
-
-Column {data-width=350}
------------------------------------------------------------------------
-
+Column {data-width=400}
+--------------
 ### Chart B
 
 ```{r}
 
 ```
 
-### Chart C
+
+### Chart B
 
 ```{r}
 
