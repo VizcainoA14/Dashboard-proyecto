@@ -56,52 +56,289 @@ APPEARED
 
 Rows {data-width=600, .tabset}
 -----------------------------------------------------------------------
-### Histogram
+### Histograma
 ```{r}
 
-p <- ggplot(data = Muestra, aes(x = appeared)) +
-  geom_histogram(bins = 63,) +
-  geom_density(alpha = 0.5, color = "red", position = " ") +
-  labs(title = "Histograma y Línea de Densidad de 'appeared' en Muestra") +
-  
-  # Personalizar la apariencia del título para centrarlo
+histograma <- ggplot(data = Muestra, aes(x = appeared)) +
+  geom_histogram(bins = 63, color = "#000000", fill ="dodgerblue") +
+  labs(title = "Histograma de 'appeared' en Muestra") +
   theme(plot.title = element_text(hjust = 0.5))
+  
 
-# Convertir el gráfico a una figura interactiva con ggplotly
-fig <- ggplotly(p)
 
-# Mostrar la figura
+fig <- ggplotly(histograma)
 fig
 
 ```
 
 
-### Chart B
+### Densidad
 
 ```{r}
+
+DensityAPP <- ggplot(data = Muestra, aes(x = appeared)) +
+  geom_density() +
+  labs(title = "Densidad de 'appeared' en Muestra") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(DensityAPP)
+
 
 ```
 
 
-### Chart B
+### Boxplot
 
 ```{r}
 
+box_APP =ggplot(data = Muestra, aes(x = "", y = appeared)) + 
+          geom_boxplot(outlier.shape = NA) +
+          geom_jitter(shape = 17,colour = "#7AC5CD", size = 0.7)+
+          labs(title = "Boxplot de 'appeared' en Muestra")+
+          theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(box_APP)
+
+
+
+
 ```
+
+### Q-Q
+
+```{r}
+
+qqAPP = ggplot(Muestra, aes(sample=appeared)) +
+  stat_qq(color='#7AC5CD') + 
+  stat_qq_line()+
+  labs(title = "Grafico Q-Q de 'appeared' en Muestra")+
+  theme(plot.title = element_text(hjust = 0.5))
+ggplotly(qqAPP)
+
+
+
+
+```
+
+
+
+
+
+
 Rows {data-width=400}
 ---------------
-### Chart x
+### Conclusiones
 
 ```{r}
 
 ```
 
  
-### Chart y
+### Preguntas interesantes
 
 ```{r}
 
 ```
+
+
+
+
+
+
+
+
+
+
+LAST ACTIVITY
+==============
+
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Histograma
+```{r}
+
+histogramaLA <- ggplot(data = Muestra, aes(x = lastActivity)) +
+  geom_histogram(bins = 63, color = "#000000", fill ="dodgerblue") +
+  labs(title = "Histograma de 'lastActivity' en Muestra") +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+
+ggplotly(histogramaLA)
+
+
+```
+
+
+### Densidad
+
+```{r}
+
+DensityLA <- ggplot(data = Muestra, aes(x = lastActivity)) +
+  geom_density() +
+  labs(title = "Densidad de 'lastActivity' en Muestra") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(DensityLA)
+
+
+```
+
+
+### Boxplot
+
+```{r}
+
+box_LA =ggplot(data = Muestra, aes(x = "", y = lastActivity)) + 
+          geom_boxplot(outlier.shape = NA) +
+          geom_jitter(shape = 17,colour = "#7AC5CD", size = 0.7)+
+          labs(title = "Boxplot de 'lastActivity' en Muestra")+
+          theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(box_LA)
+
+
+
+
+```
+
+### Q-Q
+
+```{r}
+
+qqLA = ggplot(Muestra, aes(sample=lastActivity)) +
+  stat_qq(color='#7AC5CD') + 
+  stat_qq_line()+
+  labs(title = "Grafico Q-Q de 'lastActivity' en Muestra")+
+  theme(plot.title = element_text(hjust = 0.5))
+ggplotly(qqLA)
+
+
+
+
+```
+
+
+
+
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+
+```{r}
+
+```
+
+ 
+### Preguntas interesantes
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+NUMBER OF USERS
+==============
+
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Histograma
+```{r}
+
+histogramaNU <- ggplot(data = Muestra, aes(x = numberOfUsers)) +
+  geom_histogram(bins = 63, color = "#000000", fill ="dodgerblue") +
+  labs(title = "Histograma de 'numberOfUsers' en Muestra") +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+
+ggplotly(histogramaNU)
+
+
+```
+
+
+### Densidad
+
+```{r}
+
+DensityNU <- ggplot(data = Muestra, aes(x = numberOfUsers)) +
+  geom_density() +
+  labs(title = "Densidad de 'lastActivity' en Muestra") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(DensityNU)
+
+
+```
+
+
+### Boxplot
+
+```{r}
+
+box_NU =ggplot(data = Muestra, aes(x = "", y = numberOfUsers)) + 
+          geom_boxplot(outlier.shape = NA) +
+          geom_jitter(shape = 17,colour = "#7AC5CD", size = 0.7)+
+          labs(title = "Boxplot de 'lastActivity' en Muestra")+
+          theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(box_NU)
+
+
+
+
+```
+
+### Q-Q
+
+```{r}
+
+qqNU = ggplot(Muestra, aes(sample=numberOfUsers)) +
+  stat_qq(color='#7AC5CD') + 
+  stat_qq_line()+
+  labs(title = "Grafico Q-Q de 'lastActivity' en Muestra")+
+  theme(plot.title = element_text(hjust = 0.5))
+ggplotly(qqNU)
+
+
+
+
+```
+
+
+
+
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+
+```{r}
+
+```
+
+ 
+### Preguntas interesantes
+
+```{r}
+
+```
+
+
+
 
 
 
