@@ -17,7 +17,7 @@ Data <- read_excel("Data.xlsx")
 
 # Calculo del numero de muestra
 
-n <- ((1.96**2) * ((1336/3989) * (1 - (1336/3989)))) / 0.02**2
+n <- ((1.96**2) * ((1336/3989) * (1 - (1336/3989)))) / (0.02**2)
 n <- round(n)
 # Tamaño de meustra para proporciones
 
@@ -44,25 +44,34 @@ Muestra$type <- na.aggregate(Muestra$type, FUN = function(x) Mode(x)[1])
 Muestra$website <- na.aggregate(Muestra$website, FUN = function(x) Mode(x)[1])
 Muestra$country <- na.aggregate(Muestra$country, FUN = function(x) Mode(x)[1])
 
+
+
+
+
+
 ```
 
 APPEARED 
 ==============
 
-
-Rows {data-width=650, .tabset}
+Rows {data-width=600, .tabset}
 -----------------------------------------------------------------------
 ### Histogram
 ```{r}
-p = ggplot(data = Muestra, aes(x = appeared)) + geom_histogram(bins = 20)
-fig = ggplotly(p)
+
+p <- ggplot(data = Muestra, aes(x = appeared)) +
+  geom_histogram(bins = 63,) +
+  geom_density(alpha = 0.5, color = "red", position = " ") +
+  labs(title = "Histograma y Línea de Densidad de 'appeared' en Muestra") +
+  
+  # Personalizar la apariencia del título para centrarlo
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Convertir el gráfico a una figura interactiva con ggplotly
+fig <- ggplotly(p)
+
+# Mostrar la figura
 fig
-```
-
-
-### Chart B
-
-```{r}
 
 ```
 
@@ -72,7 +81,14 @@ fig
 ```{r}
 
 ```
-Rows {data-width=650}
+
+
+### Chart B
+
+```{r}
+
+```
+Rows {data-width=400}
 ---------------
 ### Chart x
 
@@ -86,3 +102,9 @@ Rows {data-width=650}
 ```{r}
 
 ```
+
+
+
+
+
+
