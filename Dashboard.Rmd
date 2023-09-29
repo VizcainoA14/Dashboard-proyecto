@@ -141,9 +141,13 @@ Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estad�
 * Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas 
 
  
-### Preguntas interesantes
+### Datos
 
 ```{r}
+DT::datatable(data = Muestra[, c(1, 2)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
 
 ```
 
@@ -235,9 +239,13 @@ Rows {data-width=400}
 ```
 
  
-### Preguntas interesantes
+### Datos
 
 ```{r}
+DT::datatable(data = Muestra[, c(1, 4)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
 
 ```
 
@@ -251,10 +259,12 @@ Rows {data-width=600, .tabset}
 ```{r}
 
 histogramaNU <- ggplot(data = Muestra, aes(x = numberOfUsers)) +
-  geom_histogram(bins = 63, color = "#000000", fill ="dodgerblue") +
+  geom_histogram(bins = 50, color = "#000000", fill ="dodgerblue") +
   labs(title = "Histograma de 'numberOfUsers' en Muestra") +
   theme(plot.title = element_text(hjust = 0.5))
-  
+
+
+
 
 
 ggplotly(histogramaNU)
@@ -311,11 +321,6 @@ ggplotly(qqNU)
 
 ```
 
-
-
-
-
-
 Rows {data-width=400}
 ---------------
 ### Conclusiones
@@ -325,11 +330,27 @@ Rows {data-width=400}
 ```
 
  
-### Preguntas interesantes
+### Datos
 
 ```{r}
+DT::datatable(data = Muestra[, c(1, 5)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
 
 ```
+
+
+
+
+
+
+<!-- pon tus vainas aqui pipe -->
+
+
+
+Pregunta 1 {data-navmenu="Preguntas interesantes"}
+=======================
 
 
 
