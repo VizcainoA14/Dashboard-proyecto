@@ -44,14 +44,20 @@ Muestra$type <- na.aggregate(Muestra$type, FUN = function(x) Mode(x)[1])
 Muestra$website <- na.aggregate(Muestra$website, FUN = function(x) Mode(x)[1])
 Muestra$country <- na.aggregate(Muestra$country, FUN = function(x) Mode(x)[1])
 
+histograma <- hist(Data$appeared, plot = FALSE)
 
+# Normalizar el histograma
+histograma$counts <- histograma$counts / sum(histograma$counts)
+
+# Dibujar el histograma normalizado
+barplot(histograma$counts, names.arg = histograma$mids, main = "Histograma Normalizado", xlab = "Valores", ylab = "Frecuencia Relativa")
 
 
 
 
 ```
 
-APPEARED 
+APPEARED{data-navmenu="Variables Cuantitativas"}
 ==============
 
 Rows {data-width=600, .tabset}
@@ -128,10 +134,11 @@ ggplotly(qqAPP)
 Rows {data-width=400}
 ---------------
 ### Conclusiones
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
 
-```{r}
+* El histograma revelan asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
 
-```
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas 
 
  
 ### Preguntas interesantes
@@ -149,7 +156,7 @@ Rows {data-width=400}
 
 
 
-LAST ACTIVITY
+LAST ACTIVITY{data-navmenu="Variables Cuantitativas"}
 ==============
 
 Rows {data-width=600, .tabset}
@@ -219,10 +226,6 @@ ggplotly(qqLA)
 ```
 
 
-
-
-
-
 Rows {data-width=400}
 ---------------
 ### Conclusiones
@@ -239,16 +242,7 @@ Rows {data-width=400}
 ```
 
 
-
-
-
-
-
-
-
-
-
-NUMBER OF USERS
+NUMBER OF USERS{data-navmenu="Variables Cuantitativas"}
 ==============
 
 Rows {data-width=600, .tabset}
