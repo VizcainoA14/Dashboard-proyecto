@@ -114,16 +114,14 @@ ggplotly(box_APP)
 
 ```{r}
 
+datos_normales <- rnorm(100, mean = 0, sd = 1)
+
 qqAPP = ggplot(Muestra, aes(sample=appeared)) +
   stat_qq(color='#7AC5CD') + 
   stat_qq_line()+
   labs(title = "Grafico Q-Q de 'appeared' en Muestra")+
   theme(plot.title = element_text(hjust = 0.5))
 ggplotly(qqAPP)
-
-
-
-
 ```
 
 
@@ -136,9 +134,9 @@ Rows {data-width=400}
 ### Conclusiones
 Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
 
-* El histograma revelan asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
 
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas 
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
 
  
 ### Datos
@@ -233,10 +231,11 @@ ggplotly(qqLA)
 Rows {data-width=400}
 ---------------
 ### Conclusiones
+Teniendo en cuenta las graficas de la variable 'lastActivity' podemos inferir que:
 
-```{r}
+* Tanto el histograma como el gráfico de densidad exhiben un sesgo hacia la derecha, lo que indica una clara asimetría en la distribución de los datos y una cola más larga hacia los valores superiores, evidenciando que la distribución no es normal, afirmacion que es ratficada en el grafico Q-Q
 
-```
+* Por otro lado, aunque el Boxplot no muestra valores atípicos, sí revela un sesgo hacia los valores altos de la variable.
 
  
 ### Datos
@@ -324,10 +323,11 @@ ggplotly(qqNU)
 Rows {data-width=400}
 ---------------
 ### Conclusiones
+Considerando las gráficas analizadas, se puede concluir que la variable 'numberOfUser' exhibe características distintivas:
 
-```{r}
+* Tanto el gráfico Q-Q como el Boxplot revelan la existencia de numerosos valores atípicos (outliers). Esta observación sugiere que los datos presentan una gran variabilidad y no se distribuyen normalmente, ya que los valores extremos afectan la normalidad de la distribución.
 
-```
+* Además, el histograma y el gráfico de densidad muestran un sesgo notable hacia la izquierda. Este sesgo indica que hay una concentración significativa de valores en el extremo inferior de la escala, lo que contribuye aún más a la falta de normalidad en los datos.
 
  
 ### Datos
