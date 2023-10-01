@@ -581,11 +581,69 @@ Rows {data-width=400}
 
 * Podemos concluir que con un nivel de confianza del 90% la media poblacional del año de aparicion de los lenguajes de programcion de nuestra base de datos se encuentra entre los valores de 1996.05 y 1997.21
 
+############################################################
+
+DIFERENCIA ENTRE PROPORCIONES {data-navmenu="Preguntas interesantes"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Diferencia de proporciones
 ```{r}
 
+# Definir los datos
+n1 <- 1494
+n2 <- 85
+x1 <- 1147
+x2 <- 76
 
+# Calcular las proporciones
+p1 <- x1 / n1
+p2 <- x2 / n2
+
+# Calcular la diferencia de proporciones
+diff_prop <- p1 - p2
+
+# Calcular el error estándar de la diferencia
+SE <- sqrt((p1 * (1 - p1) / n1) + (p2 * (1 - p2) / n2))
+
+# Nivel de confianza (90%)
+alpha <- 0.1
+
+# Calcular el valor crítico z
+z <- qnorm(1 - alpha/2)
+
+# Calcular el intervalo de confianza
+CI_lower <- diff_prop - z * SE
+CI_upper <- diff_prop + z * SE
+
+
+# Crear un DataFrame para graficar el intervalo de confianza
+data <- data.frame(Group = "Diferencia", Lower = CI_lower, Upper = CI_upper)
+
+p=ggplot(data, aes(x = Group, y = Upper - Lower)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  geom_errorbar(aes(ymin = Lower, ymax = Upper), width = 0.2, color = "black") +
+  labs(title = "Intervalo de Confianza del 90% para Diferencia de Proporciones",
+       y = "Intervalo de Confianza") +
+  theme_minimal()
+x=ggplotly(p)
+x
 
 ```
+
+
+Rows {data-width=750}
+---------------
+### Pregunta problema
+<div style="font-size:24px;">En una muestra de paises donde se les encuesto que lenguaje de tipo de lenguaje de programacion usaron, la muestra contiene 1494 de estados unidos, donde se uso el lenguaje de programacion pl 1147; y reino unido 85 donde 76 eran pl. Calcule un intervalo de confianza de 90% para la diferencia entre la proporcion entre el tipo de lenguaje de programacion en estos paises ¿Hay una diferencia significativa entre las dos proporciones?</div>
+
+
+
+### Respuesta
+
+* Podemos concluir que con un nivel de confianza del 90% diferencia de las proporciones del tipo de lenguaje que mas se usaba en la epoca de nuestra base de datos se encuentra entre los valores de -0.1841 y -0.0686
+
+* En resumen, el intervalo de confianza indica que hay una diferencia significativa en las proporciones del tipo de lenguaje de programación entre los dos grupos, y esta diferencia sugiere que el tipo de lenguaje era más común en Estados Unidos que en el Reino Unido en la época de tu base de datos.
 
 
 
