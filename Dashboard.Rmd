@@ -414,7 +414,7 @@ fig
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-se observa una distribución diversa de países de origen entre los elementos de nuestro conjunto. Entre los países más representados, destacan Estados Unidos, Reino Unido y Canadá, que juntos conforman la mayoría de las entradas. Esto sugiere que nuestro conjunto de datos tiene una fuerte presencia de elementos relacionados con estas tres naciones.
+Se observa una distribución diversa de países de origen entre los elementos de nuestro conjunto. Entre los países más representados, destacan Estados Unidos, Reino Unido y Canadá, que juntos conforman la mayoría de las entradas. Esto sugiere que nuestro conjunto de datos tiene una fuerte presencia de elementos relacionados con estas tres naciones.
 
 La categoría más frecuente es "United States" (Estados Unidos), con una frecuencia absoluta de 1494, lo que representa aproximadamente el 69.85% del conjunto de datos en términos de procedencia geográfica. Le sigue "United Kingdom" (Reino Unido) con una frecuencia absoluta de 85 y "Canada" (Canadá) con 69.
 
@@ -655,10 +655,10 @@ x
 ```
 
 
-Rows {data-width=750}
+Rows {data-width=600}
 ---------------
 ### Pregunta problema
-<div style="font-size:24px;">En una muestra de paises donde se les encuesto que lenguaje de tipo de lenguaje de programacion usaron, la muestra contiene 1494 de estados unidos, donde se uso el lenguaje de programacion pl 1147; y reino unido 85 donde 76 eran pl. Calcule un intervalo de confianza de 90% para la diferencia entre la proporcion entre el tipo de lenguaje de programacion en estos paises ¿Hay una diferencia significativa entre las dos proporciones?</div>
+<div style="font-size:20px;">En una muestra de paises donde se les encuesto que lenguaje de tipo de lenguaje de programacion usaron, la muestra contiene 1494 de estados unidos, donde se uso el lenguaje de programacion pl 1147; y reino unido 85 donde 76 eran pl. Calcule un intervalo de confianza de 90% para la diferencia entre la proporcion entre el tipo de lenguaje de programacion en estos paises ¿Hay una diferencia significativa entre las dos proporciones?</div>
 
 
 
@@ -668,6 +668,62 @@ Rows {data-width=750}
 
 * En resumen, el intervalo de confianza indica que hay una diferencia significativa en las proporciones del tipo de lenguaje de programación entre los dos grupos, y esta diferencia sugiere que el tipo de lenguaje era más común en Estados Unidos que en el Reino Unido en la época de tu base de datos.
 
+####################################
+PROPORCION {data-navmenu="Preguntas interesantes"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Diferencia de proporciones
+```{r}
+
+# Datos
+n <- 2139  # Tamaño de la muestra
+x <- 1660  # Número de casos favorables (uso de desarrollo "pl")
+
+# Proporción muestral
+p_hat <- x / n
+
+# Nivel de confianza (99%)
+alpha <- 0.01
+
+# Estadístico z crítico para un nivel de confianza del 99%
+z <- qnorm(1 - alpha/2)
+
+# Error estándar de la proporción
+SE <- sqrt(p_hat * (1 - p_hat) / n)
+
+# Calcular el intervalo de confianza
+CI_lower <- p_hat - z * SE
+CI_upper <- p_hat + z * SE
+
+# Crear un dataframe para el gráfico
+intervalo_df <- data.frame(
+  Categoria = c("Intervalo de Confianza"),
+  Valor = c(CI_lower, CI_upper)
+)
+
+# Gráfico de barras con intervalo de confianza
+library(ggplot2)
+
+grafico_intervalo <- ggplot(intervalo_df, aes(x = Categoria, y = Valor)) +
+  geom_bar(stat = "identity", fill = "skyblue", width = 0.5) +
+  geom_errorbar(aes(ymin = CI_lower, ymax = CI_upper), width = 0.2, color = "blue") +
+  labs(title = "Intervalo de Confianza del 99% para la Proporción de Uso de 'pl'",
+       y = "Intervalo de Confianza") +
+  theme_minimal()
+x=ggplotly(grafico_intervalo)
+x
+```
+
+
+Rows {data-width=750}
+---------------
+### Pregunta problema
+<div style="font-size:24px;"> En una muestra aleatoria 2139 de un tipo lenguajes de programacion se encuentra que usan el tipo de lenguaje pl en una razon de 1660 para uso de desarrollo. Calcule el intervalo de confianza del 99% para la proporcion de tipos de lenguajes de programacion.</div>
+
+### Respuesta
+
+* En resumen, con un nivel de confianza del 99%, podemos concluir que la proporción de uso del tipo de lenguaje "pl" en la población se encuentra muy probablemente dentro del intervalo [0.7528, 0.7993], y el estimado de la proporción en la muestra es aproximadamente 0.7761.
 
 
 
