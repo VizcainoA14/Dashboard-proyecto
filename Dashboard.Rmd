@@ -1,11 +1,12 @@
 ---
-title: "Tecnologias, herramientas y lenguajes de programacion 1960-2023"
+title: "TECNOLOGIAS, HERRAMIENTAS Y LENGUAJES DE PROGRAMACION 1960-2023"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
+    social: [ "twitter", "facebook" ]
+    source_code: embed
 ---
-
 ```{r setup, include=FALSE}
 
 library(flexdashboard)
@@ -17,12 +18,10 @@ library(knitr)
 Data <- read_excel("Data.xlsx")
 
 # Calculo del numero de muestra
-
 n <- ((1.96**2) * ((1336/3989) * (1 - (1336/3989)))) / (0.02**2)
 n <- round(n)
+
 # Tamaño de meustra para proporciones
-
-
 set.seed(00065280) # Establecer una semilla para reproducibilidad
 tamano_muestra <- n # Reemplaza 'n' con el tamaño deseado de la muestra
 Muestra <- Data[sample(nrow(Data), tamano_muestra), ]
@@ -45,17 +44,6 @@ Muestra$type <- na.aggregate(Muestra$type, FUN = function(x) Mode(x)[1])
 Muestra$website <- na.aggregate(Muestra$website, FUN = function(x) Mode(x)[1])
 Muestra$country <- na.aggregate(Muestra$country, FUN = function(x) Mode(x)[1])
 
-histograma <- hist(Data$appeared, plot = FALSE)
-
-# Normalizar el histograma
-histograma$counts <- histograma$counts / sum(histograma$counts)
-
-# Dibujar el histograma normalizado
-barplot(histograma$counts, names.arg = histograma$mids, main = "Histograma Normalizado", xlab = "Valores", ylab = "Frecuencia Relativa")
-
-
-
-
 ```
 
 APPEARED{data-navmenu="Variables Cuantitativas"}
@@ -71,8 +59,6 @@ histograma <- ggplot(data = Muestra, aes(x = appeared)) +
   labs(title = "Histograma de 'appeared' en Muestra") +
   theme(plot.title = element_text(hjust = 0.5))
   
-
-
 fig <- ggplotly(histograma)
 fig
 
@@ -89,15 +75,12 @@ DensityAPP <- ggplot(data = Muestra, aes(x = appeared)) +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggplotly(DensityAPP)
-
-
 ```
 
 
 ### Boxplot
 
 ```{r}
-
 box_APP =ggplot(data = Muestra, aes(x = "", y = appeared)) + 
           geom_boxplot(outlier.shape = NA) +
           geom_jitter(shape = 17,colour = "#7AC5CD", size = 0.7)+
@@ -106,17 +89,11 @@ box_APP =ggplot(data = Muestra, aes(x = "", y = appeared)) +
 
 ggplotly(box_APP)
 
-
-
-
 ```
 
 ### Q-Q
 
 ```{r}
-
-datos_normales <- rnorm(100, mean = 0, sd = 1)
-
 qqAPP = ggplot(Muestra, aes(sample=appeared)) +
   stat_qq(color='#7AC5CD') + 
   stat_qq_line()+
@@ -166,39 +143,30 @@ Rows {data-width=600, .tabset}
 -----------------------------------------------------------------------
 ### Histograma
 ```{r}
-
 histogramaLA <- ggplot(data = Muestra, aes(x = lastActivity)) +
   geom_histogram(bins = 63, color = "#000000", fill ="dodgerblue") +
   labs(title = "Histograma de 'lastActivity' en Muestra") +
   theme(plot.title = element_text(hjust = 0.5))
-  
-
 
 ggplotly(histogramaLA)
-
-
 ```
 
 
 ### Densidad
 
 ```{r}
-
 DensityLA <- ggplot(data = Muestra, aes(x = lastActivity)) +
   geom_density() +
   labs(title = "Densidad de 'lastActivity' en Muestra") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggplotly(DensityLA)
-
-
 ```
 
 
 ### Boxplot
 
 ```{r}
-
 box_LA =ggplot(data = Muestra, aes(x = "", y = lastActivity)) + 
           geom_boxplot(outlier.shape = NA) +
           geom_jitter(shape = 17,colour = "#7AC5CD", size = 0.7)+
@@ -206,26 +174,17 @@ box_LA =ggplot(data = Muestra, aes(x = "", y = lastActivity)) +
           theme(plot.title = element_text(hjust = 0.5))
 
 ggplotly(box_LA)
-
-
-
-
 ```
 
 ### Q-Q
 
 ```{r}
-
 qqLA = ggplot(Muestra, aes(sample=lastActivity)) +
   stat_qq(color='#7AC5CD') + 
   stat_qq_line()+
   labs(title = "Grafico Q-Q de 'lastActivity' en Muestra")+
   theme(plot.title = element_text(hjust = 0.5))
 ggplotly(qqLA)
-
-
-
-
 ```
 
 
@@ -263,13 +222,7 @@ histogramaNU <- ggplot(data = Muestra, aes(x = numberOfUsers)) +
   labs(title = "Histograma de 'numberOfUsers' en Muestra") +
   theme(plot.title = element_text(hjust = 0.5))
 
-
-
-
-
 ggplotly(histogramaNU)
-
-
 ```
 
 
@@ -283,15 +236,12 @@ DensityNU <- ggplot(data = Muestra, aes(x = numberOfUsers)) +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggplotly(DensityNU)
-
-
 ```
 
 
 ### Boxplot
 
 ```{r}
-
 box_NU =ggplot(data = Muestra, aes(x = "", y = numberOfUsers)) + 
           geom_boxplot(outlier.shape = NA) +
           geom_jitter(shape = 17,colour = "#7AC5CD", size = 0.7)+
@@ -299,9 +249,6 @@ box_NU =ggplot(data = Muestra, aes(x = "", y = numberOfUsers)) +
           theme(plot.title = element_text(hjust = 0.5))
 
 ggplotly(box_NU)
-
-
-
 
 ```
 
@@ -315,10 +262,6 @@ qqNU = ggplot(Muestra, aes(sample=numberOfUsers)) +
   labs(title = "Grafico Q-Q de 'lastActivity' en Muestra")+
   theme(plot.title = element_text(hjust = 0.5))
 ggplotly(qqNU)
-
-
-
-
 ```
 
 Rows {data-width=400}
@@ -341,13 +284,6 @@ DT::datatable(data = Muestra[, c(1, 5)],
 
 ```
 
-
-
-
-
-
-<!-- pon tus vainas aqui pipe -->
-
 TYPE{data-navmenu="Variables Cualitativas"}
 ==============
 
@@ -355,7 +291,6 @@ Rows {data-width=600, .tabset}
 -----------------------------------------------------------------------
 ### Grafico de barras
 ```{r}
-
 # Gráfico de barras para Type
 x=ggplot(Muestra, aes(x = type)) +
   geom_bar(fill ="dodgerblue",color = "#000000") +
@@ -382,14 +317,6 @@ DT::datatable(data = Muestra[, c(1, 3)],
 ```
 
 
-
-
-
-
-
-
-
-
 COUNTRY{data-navmenu="Variables Cualitativas"}
 ==============
 
@@ -405,10 +332,6 @@ fig <- plot_ly(type='pie', labels=labels, values=values,
                 textinfo='label+percent',
                 insidetextorientation='radial')
 fig
-
-
-
-
 ```
 
 Rows {data-width=400}
@@ -465,14 +388,12 @@ DT::datatable(data = Muestra[, c(1, 6)],
                              class = 'stripe compact hover cell-border'))
 
 ```
-Tablas de contingencia{data-navmenu="Variables Cualitativas"}
+TABLAS DE CONTINGENCIA{data-navmenu="Variables Cualitativas"}
 ==============
 
 Rows {data-width=600, .tabset}
 -----------------------------------------------------------------------
-
 ### Tablas de contigencia 1 
-
 ```{r}
 # Calcular la tabla de contingencia entre Type y country
 tabla_type_country <- table(Muestra$type, Muestra$country)
@@ -491,9 +412,6 @@ kable(tabla_country_website)
 tabla_website_type <- table(Muestra$type, Muestra$website)
 kable(tabla_website_type)
 ```
-
-
-
 
 INTERVALO DE CONFIANZA PARA LA MEDIA {data-navmenu="Preguntas interesantes"}
 =======================
@@ -541,7 +459,6 @@ Rows {data-width=600, .tabset}
 -----------------------------------------------------------------------
 ### Intervalos de confianza para la varianza
 ```{r}
-
 desviacion = sd(Muestra$lastActivity)
 
 intervalo_superior = ((n-1)*desviacion**2)/qchisq(0.025,n-1)
@@ -644,13 +561,6 @@ p=ggplot(data, aes(x = Group, y = Upper)) +
   theme_minimal()
 x=ggplotly(p)
 x
-
-
-
-
-
-
-
 
 ```
 
