@@ -495,7 +495,7 @@ kable(tabla_website_type)
 
 
 
-PREGUNTA 1 {data-navmenu="Preguntas interesantes"}
+INTERVALO DE CONFIANZA PARA LA MEDIA {data-navmenu="Preguntas interesantes"}
 =======================
 Rows {data-width=600, .tabset}
 -----------------------------------------------------------------------
@@ -507,12 +507,12 @@ media=mean(Muestra$appeared)
 intervalo_superior = media+(qnorm((1+0.90)/2)*(sd(Data$appeared)/sqrt(n)))
 intervalo_inferior = media-(qnorm((1+0.90)/2)*(sd(Data$appeared)/sqrt(n)))
 
-intervalo = data.frame(Media = media,Inferior = intervalo_inferior, Superior = intervalo_superior)
+intervalo = data.frame(Media = media, Inferior = intervalo_inferior, Superior = intervalo_superior)
 
 # Crea el gráfico de barras con intervalos de confianza
 int = ggplot(intervalo, aes(x = "Media", y = Media)) +
   geom_bar(stat = "identity", fill = "skyblue", width = 0.5) +
-  geom_errorbar(aes(ymin = Inferior, ymax = Superior), width = 2.5, color = "skyblue") +
+  geom_errorbar(aes(ymin = Inferior, ymax = Superior), width = 2, color = "skyblue") +
   coord_flip() +
   ylim(intervalo_inferior - 2, intervalo_superior + 2) +
   labs(title = "Intervalo de Confianza para la Media Poblacional", y = "APPEARED") +
@@ -530,42 +530,60 @@ Rows {data-width=400}
 
  
 ### Respuesta
-* Para la respuesta dada, se uso un script de r para la estimacion del intervalo de confianza de la media poblacional, teniendo conocimento de la desviacion tipica de la poblacion de la variable appeared. luego para tener evidencia visual de los resultados se genero un intervalo sobre una grafica
+* Para la respuesta dada, se usó un script de R para la estimación del intervalo de confianza de la media poblacional, teniendo conocimiento de la desviación típica de la población de la variable appeared. Luego, para tener evidencia visual de los resultados, se generó un intervalo sobre un gráfico.
 
-* Podemos concluir que con un nivel de confianza del 90% la media poblacional del año de aparicion de los lenguajes de programcion de nuestra base de datos se encuentra entre los valores de 1996.05 y 1997.21
+* Podemos concluir que, con un nivel de confianza del 90%, la media poblacional del año de aparición de los lenguajes de programación de nuestra base de datos se encuentra entre los valores de 1996.05 y 1997.21.
 
 
-PREGUNTA 2 {data-navmenu="Preguntas interesantes"}
+INTERVALO DE CONFIANZA PARA VARIANZA Y DESVIACION {data-navmenu="Preguntas interesantes"}
 =======================
 Rows {data-width=600, .tabset}
 -----------------------------------------------------------------------
 ### Intervalos de confianza para la varianza
 ```{r}
 
-desviacion = sd(Muestra$numberOfUsers)
-x = var(Data$numberOfUsers)
+desviacion = sd(Muestra$lastActivity)
 
-intervalo_inferior = ((n-1)*desviacion**2)/qchisq(0.025,n-1)
-intervalo_inferior
+intervalo_superior = ((n-1)*desviacion**2)/qchisq(0.025,n-1)
 
+intervalo_inferior = ((n-1)*desviacion**2)/qchisq(1-0.025,n-1)
 
-intervalo_superior = ((n-1)*desviacion**2)/qchisq(1-0.025,n-1)
-intervalo_superior
-
-
-
-intervalo = data.frame(Media = media,Inferior = intervalo_inferior, Superior = intervalo_superior)
+intervalo = data.frame(Varianza = desviacion^2, Inferior = intervalo_inferior, Superior = intervalo_superior)
 
 # Crea el gráfico de barras con intervalos de confianza
-int = ggplot(intervalo, aes(x = "Media", y = Media)) +
+fig3 = ggplot(intervalo, aes(x = "Varianza", y = Varianza)) +
   geom_bar(stat = "identity", fill = "skyblue", width = 0.5) +
-  geom_errorbar(aes(ymin = Inferior, ymax = Superior), width = 2.5, color = "skyblue") +
-  coord_flip() +
-  ylim(intervalo_inferior - 2, intervalo_superior + 2) +
-  labs(title = "Intervalo de Confianza para la Media Poblacional", y = "APPEARED") +
+  geom_errorbar(aes(ymin = Inferior, ymax = Superior), width = 10, color = "purple") +
+  coord_flip()+
+  ylim(intervalo_inferior-2, intervalo_superior+2) +
+  labs(title = "Intervalo de Confianza para la Varianza", y = "Varianza LASTACTIVITY") +
   theme_minimal()
 
-ggplotly(int)
+ggplotly(fig3)
+
+```
+
+### Intervalos de confianza para la desviacion
+```{r}
+
+desviacion = sd(Muestra$lastActivity)
+
+intervalo_superior = ((n-1)*desviacion)/qchisq(0.025,n-1)
+
+intervalo_inferior = ((n-1)*desviacion)/qchisq(1-0.025,n-1)
+
+intervalo = data.frame(Desviacion = desviacion, Inferior = intervalo_inferior, Superior = intervalo_superior)
+
+
+fig3 = ggplot(intervalo, aes(x = "Desviacion", y = Desviacion)) +
+  geom_bar(stat = "identity", fill = "skyblue", width = 0.5) +
+  geom_errorbar(aes(ymin = Inferior, ymax = Superior), width = 2.5, color = "purple") +
+  coord_flip()+
+  ylim(intervalo_inferior-2, intervalo_superior+2) +
+  labs(title = "Intervalo de Confianza para la Desviacion", y = "Desviacion LASTACTIVITY") +
+  theme_minimal()
+
+ggplotly(fig3)
 
 ```
 
@@ -573,19 +591,16 @@ ggplotly(int)
 Rows {data-width=400}
 ---------------
 ### Pregunta problema
-<div style="font-size:24px;">Se tiene una muestra aleatoria de 2139 tecnologías informáticas con sus respectivas cantidades de usuarios activos en 2023, los cuales presentan una desviación típica de 190401.5. Teniendo esto en cuenta, calcule un intervalo de confianza del 95% para la varianza y la desviación estándar</div>
+<div style="font-size:24px;">Se tiene una muestra aleatoria de 2139 tecnologías informáticas con sus respectivos años de última modificación, los cuales presentan una desviación típica de 16.92. Teniendo esto en cuenta, calcule un intervalo de confianza del 95% para la varianza y la desviación estándar</div>
 
  
 ### Respuesta
-* Para la respuesta dada, se uso un script de r para la estimacion del intervalo de confianza de la media poblacional, teniendo conocimento de la desviacion tipica de la poblacion de la variable appeared. luego para tener evidencia visual de los resultados se genero un intervalo sobre una grafica
+* Para la respuesta dada, se usó un script de R para la estimación del intervalo de confianza de la varianza y la desviación, teniendo conocimiento de la desviación típica de la población de la variable LASTACTIVITY. Luego, para tener evidencia visual de los resultados, se generó un intervalo sobre un gráfico para los dos estadísticos.
 
-* Podemos concluir que con un nivel de confianza del 90% la media poblacional del año de aparicion de los lenguajes de programcion de nuestra base de datos se encuentra entre los valores de 1996.05 y 1997.21
+* Podemos concluir que, con un nivel de confianza del 95%, la varianza poblacional del último año de modificación de las tecnologías informáticas de nuestra base de datos se encuentra entre los valores de 269.96 y 304.36.
 
-```{r}
+* Por otro lado, la desviación poblacional de la variable LASTACTIVITY podemos afirmar que se encuentra en un rango de 15.95 y 17.98 con un nivel de confianza del 95%.
 
-
-
-```
 
 
 
