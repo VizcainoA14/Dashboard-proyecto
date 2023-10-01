@@ -358,7 +358,7 @@ Rows {data-width=600, .tabset}
 
 # Gráfico de barras para Type
 x=ggplot(Muestra, aes(x = type)) +
-  geom_bar() +
+  geom_bar(fill ="dodgerblue",color = "#000000") +
   labs(title = "Gráfico de Barras para TYPE")
 
 p= ggplotly(x)
@@ -440,7 +440,7 @@ Rows {data-width=600, .tabset}
 
 # Gráfico de barras para Variable3
 x=ggplot(Muestra, aes(x = website)) +
-  geom_bar() +
+  geom_bar(fill ="dodgerblue",color = "#000000") +
   labs(title = "Gráfico de Barras para WEBSITE")
 p = ggplotly(x)
 p
@@ -599,8 +599,7 @@ Rows {data-width=400}
 
 * Podemos concluir que, con un nivel de confianza del 95%, la varianza poblacional del último año de modificación de las tecnologías informáticas de nuestra base de datos se encuentra entre los valores de 269.96 y 304.36.
 
-<<<<<<< HEAD
-############################################################
+* Por otro lado, la desviación poblacional de la variable LASTACTIVITY podemos afirmar que se encuentra en un rango de 15.95 y 17.98 con un nivel de confianza del 95%.
 
 DIFERENCIA ENTRE PROPORCIONES {data-navmenu="Preguntas interesantes"}
 =======================
@@ -608,10 +607,6 @@ Rows {data-width=600, .tabset}
 -----------------------------------------------------------------------
 ### Diferencia de proporciones
 ```{r}
-=======
-* Por otro lado, la desviación poblacional de la variable LASTACTIVITY podemos afirmar que se encuentra en un rango de 15.95 y 17.98 con un nivel de confianza del 95%.
->>>>>>> 20a38b8a2ee0e3e9ede42f7c30d3f5a45c3f6c19
-
 # Definir los datos
 n1 <- 1494
 n2 <- 85
@@ -642,16 +637,21 @@ CI_upper <- diff_prop + z * SE
 # Crear un DataFrame para graficar el intervalo de confianza
 data <- data.frame(Group = "Diferencia", Lower = CI_lower, Upper = CI_upper)
 
-p=ggplot(data, aes(x = Group, y = Upper - Lower)) +
-  geom_bar(stat = "identity", fill = "blue") +
-  geom_errorbar(aes(ymin = Lower, ymax = Upper), width = 0.2, color = "black") +
+p=ggplot(data, aes(x = Group, y = Upper)) +
+  geom_errorbar(aes(ymin = 0, ymax = Upper), width = 0.2, color = "black") +
   labs(title = "Intervalo de Confianza del 90% para Diferencia de Proporciones",
        y = "Intervalo de Confianza") +
   theme_minimal()
 x=ggplotly(p)
 x
 
-<<<<<<< HEAD
+
+
+
+
+
+
+
 ```
 
 
@@ -669,6 +669,5 @@ Rows {data-width=750}
 * En resumen, el intervalo de confianza indica que hay una diferencia significativa en las proporciones del tipo de lenguaje de programación entre los dos grupos, y esta diferencia sugiere que el tipo de lenguaje era más común en Estados Unidos que en el Reino Unido en la época de tu base de datos.
 
 
-=======
->>>>>>> 20a38b8a2ee0e3e9ede42f7c30d3f5a45c3f6c19
+
 
