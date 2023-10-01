@@ -506,9 +506,8 @@ kable(tabla_website_type)
 
 
 
-Pregunta 1 {data-navmenu="Preguntas interesantes"}
+PREGUNTA 1 {data-navmenu="Preguntas interesantes"}
 =======================
-
 Rows {data-width=600, .tabset}
 -----------------------------------------------------------------------
 ### Intervalos de confianza para la media
@@ -545,6 +544,72 @@ Rows {data-width=400}
 * Para la respuesta dada, se uso un script de r para la estimacion del intervalo de confianza de la media poblacional, teniendo conocimento de la desviacion tipica de la poblacion de la variable appeared. luego para tener evidencia visual de los resultados se genero un intervalo sobre una grafica
 
 * Podemos concluir que con un nivel de confianza del 90% la media poblacional del año de aparicion de los lenguajes de programcion de nuestra base de datos se encuentra entre los valores de 1996.05 y 1997.21
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PREGUNTA 2 {data-navmenu="Preguntas interesantes"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Intervalos de confianza para la varianza
+```{r}
+
+desviacion = sd(Muestra$numberOfUsers)
+x = var(Data$numberOfUsers)
+
+intervalo_inferior = ((n-1)*desviacion**2)/qchisq(0.025,n-1)
+intervalo_inferior
+
+
+intervalo_superior = ((n-1)*desviacion**2)/qchisq(1-0.025,n-1)
+intervalo_superior
+
+
+
+intervalo = data.frame(Media = media,Inferior = intervalo_inferior, Superior = intervalo_superior)
+
+# Crea el gráfico de barras con intervalos de confianza
+int = ggplot(intervalo, aes(x = "Media", y = Media)) +
+  geom_bar(stat = "identity", fill = "skyblue", width = 0.5) +
+  geom_errorbar(aes(ymin = Inferior, ymax = Superior), width = 2.5, color = "skyblue") +
+  coord_flip() +
+  ylim(intervalo_inferior - 2, intervalo_superior + 2) +
+  labs(title = "Intervalo de Confianza para la Media Poblacional", y = "APPEARED") +
+  theme_minimal()
+
+ggplotly(int)
+
+```
+
+
+Rows {data-width=400}
+---------------
+### Pregunta problema
+<div style="font-size:24px;">Se tiene una muestra aleatoria de 2139 tecnologías informáticas con sus respectivas cantidades de usuarios activos en 2023, los cuales presentan una desviación típica de 190401.5. Teniendo esto en cuenta, calcule un intervalo de confianza del 95% para la varianza y la desviación estándar</div>
+
+ 
+### Respuesta
+* Para la respuesta dada, se uso un script de r para la estimacion del intervalo de confianza de la media poblacional, teniendo conocimento de la desviacion tipica de la poblacion de la variable appeared. luego para tener evidencia visual de los resultados se genero un intervalo sobre una grafica
+
+* Podemos concluir que con un nivel de confianza del 90% la media poblacional del año de aparicion de los lenguajes de programcion de nuestra base de datos se encuentra entre los valores de 1996.05 y 1997.21
+
+```{r}
+
+
+
+```
+
 
 
 
