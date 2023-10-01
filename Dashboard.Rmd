@@ -369,12 +369,7 @@ p
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
-
-* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
-
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
-
+En este análisis de la variable "type" en nuestro conjunto de datos, se identifico patrones y tendencias significativas que arrojan luz sobre la composicion de esta misma. Destaca en gran medida la presencia de la categoría "pl",es decir, lenguaje de programacion que constituye la categoría dominante con una frecuencia absoluta de 1660 elementos, representando aproximadamente el 77.61% del conjunto lo cual nos dice su concurrencia en toda la base datos y lo importancia en la misma.
  
 ### Datos
 
@@ -419,11 +414,9 @@ fig
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-Teniendo en cuenta las graficas de la variable 'lastActivity' podemos inferir que:
+se observa una distribución diversa de países de origen entre los elementos de nuestro conjunto. Entre los países más representados, destacan Estados Unidos, Reino Unido y Canadá, que juntos conforman la mayoría de las entradas. Esto sugiere que nuestro conjunto de datos tiene una fuerte presencia de elementos relacionados con estas tres naciones.
 
-* Tanto el histograma como el gráfico de densidad exhiben un sesgo hacia la derecha, lo que indica una clara asimetría en la distribución de los datos y una cola más larga hacia los valores superiores, evidenciando que la distribución no es normal, afirmacion que es ratficada en el grafico Q-Q
-
-* Por otro lado, aunque el Boxplot no muestra valores atípicos, sí revela un sesgo hacia los valores altos de la variable.
+La categoría más frecuente es "United States" (Estados Unidos), con una frecuencia absoluta de 1494, lo que representa aproximadamente el 69.85% del conjunto de datos en términos de procedencia geográfica. Le sigue "United Kingdom" (Reino Unido) con una frecuencia absoluta de 85 y "Canada" (Canadá) con 69.
 
  
 ### Datos
@@ -450,7 +443,7 @@ x=ggplot(Muestra, aes(x = website)) +
   geom_bar() +
   labs(title = "Gráfico de Barras para WEBSITE")
 p = ggplotly(x)
-x
+p
 
 ```
 
@@ -458,11 +451,9 @@ x
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-Considerando las gráficas analizadas, se puede concluir que la variable 'numberOfUser' exhibe características distintivas:
+Basado en los resultados de la tabla de frecuencia absoluta y relativa de la variable "website", se puede concluir que la mayoría de los lenguajes de programación en nuestro conjunto de datos tienen un sitio web asociado. Específicamente, el 67.42% de los lenguajes de programación no tienen un sitio web, mientras que el 32.59% si lo tienen.
 
-* Tanto el gráfico Q-Q como el Boxplot revelan la existencia de numerosos valores atípicos (outliers). Esta observación sugiere que los datos presentan una gran variabilidad y no se distribuyen normalmente, ya que los valores extremos afectan la normalidad de la distribución.
-
-* Además, el histograma y el gráfico de densidad muestran un sesgo notable hacia la izquierda. Este sesgo indica que hay una concentración significativa de valores en el extremo inferior de la escala, lo que contribuye aún más a la falta de normalidad en los datos.
+Esto sugiere que no hay tanta presencia de sitios web asociados a los lenguajes de programacion no es común entre los lenguajes de programación en el conjunto de datos. La existencia de sitios web puede ser un indicador de la accesibilidad y disponibilidad de información adicional sobre estos lenguajes, lo que puede ser valioso para los desarrolladores y la comunidad en general.
 
  
 ### Datos
