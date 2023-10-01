@@ -497,8 +497,6 @@ kable(tabla_website_type)
 
 PREGUNTA 1 {data-navmenu="Preguntas interesantes"}
 =======================
-<<<<<<< HEAD
-=======
 Rows {data-width=600, .tabset}
 -----------------------------------------------------------------------
 ### Intervalos de confianza para la media
@@ -535,19 +533,6 @@ Rows {data-width=400}
 * Para la respuesta dada, se uso un script de r para la estimacion del intervalo de confianza de la media poblacional, teniendo conocimento de la desviacion tipica de la poblacion de la variable appeared. luego para tener evidencia visual de los resultados se genero un intervalo sobre una grafica
 
 * Podemos concluir que con un nivel de confianza del 90% la media poblacional del año de aparicion de los lenguajes de programcion de nuestra base de datos se encuentra entre los valores de 1996.05 y 1997.21
-
-
->>>>>>> 3c44b42aec633ca0e7902955d20169737db30043
-
-
-
-
-
-
-
-
-
-
 
 
 PREGUNTA 2 {data-navmenu="Preguntas interesantes"}
@@ -601,15 +586,6 @@ Rows {data-width=400}
 
 
 ```
-
-
-
-
-
-
-
-
-
 
 
 
