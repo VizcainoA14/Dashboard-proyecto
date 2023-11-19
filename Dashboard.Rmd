@@ -14,6 +14,9 @@ library(readxl)
 library(tidyverse)
 library(plotly)
 library(knitr)
+library(DT)
+library(ggbeeswarm)
+
 
 Data <- read_excel("Data.xlsx")
 
@@ -634,6 +637,1186 @@ Rows {data-width=750}
 ### Respuesta
 
 * En resumen, con un nivel de confianza del 99%, podemos concluir que la proporción de uso del tipo de lenguaje "pl" en la población se encuentra muy probablemente dentro del intervalo [0.7528, 0.7993], y el estimado de la proporción en la muestra es aproximadamente 0.7761.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+APPEARED - LAST_ACTIVITY{data-navmenu="Analisis bivariado"}
+=======================
+
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Dispersion
+```{r}
+
+dispersion = ggplot(Muestra, aes(x = lastActivity , y = appeared)) +
+              geom_point() +
+              geom_smooth(method = "lm", se = F, color = "dodgerblue") +
+              labs(title = "Grafico de dispersion lastActivity vs appeared", x = "LAST ACTIVITY", y = "APPEARED")+
+              theme(plot.title = element_text(hjust = 0.5))
+  
+fig <- ggplotly(dispersion)
+fig
+
+```
+
+
+### Residuos Estandarizados
+
+```{r}
+
+modelo <- lm(appeared ~ lastActivity, data = Muestra)
+residuos2 <- scale(resid(modelo))
+
+RE=ggplot() +
+    geom_point(aes(x = Muestra$appeared, y = residuos2)) +
+    geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+    labs(title = "Gráfico de residuos estandarizados", x = "APPEARED", y = "Residuos Estandarizados")+
+    theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(RE)
+```
+
+
+### Q-Q
+
+```{r}
+modelo <- lm(appeared  ~ lastActivity, data = Muestra)
+residuos <- resid(modelo)
+
+qqAPP <- ggplot(data = NULL, aes(sample = residuos)) +
+  stat_qq(color = '#7AC5CD') +
+  stat_qq_line() +
+  labs(title = "Gráfico Q-Q de residuos", x = "Theorical Quantiles", y = "Sample Quantiles") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(qqAPP)
+
+```
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+
+* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+
+ 
+### Estadisticos
+```{r}
+
+covar_xy = cov(Muestra$lastActivity, Muestra$appeared)
+
+correlacion_xy = cor(Muestra$lastActivity, Muestra$appeared)
+
+modelo = lm(appeared ~ lastActivity, data = Muestra)
+intercepto = coef(modelo)[1]
+coeficiente = coef(modelo)[2]
+ecuacion = paste("y =", round(intercepto, 2), "+", round(coeficiente, 2), "x")
+
+coef_determinacion = summary(modelo)$r.squared
+
+SCE = sum(modelo$residuals^2)
+
+SCR = sum((predict(modelo) - mean(Muestra$appeared))^2)
+
+variabilidad = SCE/(n-2)
+
+
+tabla <- data.frame(
+  Estadisticos = c("Modelo","Covarianza", "Correlacion", "Coefiente de determinacion", "SCE", "SCR", "Varibilidad total"),
+  Valores = c(ecuacion ,covar_xy, correlacion_xy, coef_determinacion, SCE, SCR, variabilidad)
+)
+
+# Crear la tabla con DT::datatable
+datatable(data = tabla[, c("Estadisticos", "Valores")],
+          extensions = 'Scroller',
+          options = list(dom = 'tp',  
+                         class = 'stripe compact hover cell-border'))
+
+
+
+
+```
+
+APPEARED - NUMBER OF USERS{data-navmenu="Analisis bivariado"}
+=======================
+
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Dispersion
+```{r}
+
+dispersion = ggplot(Muestra, aes(x = appeared , y = numberOfUsers)) +
+              geom_point() +
+              geom_smooth(method = "lm", se = F, color = "dodgerblue") +
+              labs(title = "Grafico de dispersion apperared vs numberOfUsers", x = "APPEARED", y = "NUMBER OF USERS")+
+              theme(plot.title = element_text(hjust = 0.5))+scale_y_log10()
+  
+fig <- ggplotly(dispersion)
+fig
+
+```
+
+
+### Residuos Estandarizados
+
+```{r}
+
+modelo <- lm(numberOfUsers ~ appeared, data = Muestra)
+residuos2 <- scale(resid(modelo))
+
+RE=ggplot() +
+    geom_point(aes(x = Muestra$appeared, y = residuos2)) +
+    geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+    labs(title = "Gráfico de residuos estandarizados", x = "APPEARED", y = "Residuos Estandarizados")+
+    theme(plot.title = element_text(hjust = 0.5))+ylim(-20, 20)
+
+ggplotly(RE)
+```
+
+
+### Q-Q
+
+```{r}
+modelo <- lm(numberOfUsers ~ appeared, data = Muestra)
+residuos <- resid(modelo)
+
+qqAPP <- ggplot(data = NULL, aes(sample = residuos)) +
+  stat_qq(color = '#7AC5CD') +
+  stat_qq_line() +
+  labs(title = "Gráfico Q-Q de residuos", x = "Theorical Quantiles", y = "Sample Quantiles") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(qqAPP)
+
+```
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+
+* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+
+ 
+### Estadisticos
+```{r}
+
+covar_xy = cov(Muestra$appeared, Muestra$numberOfUsers)
+
+correlacion_xy = cor(Muestra$appeared, Muestra$numberOfUsers)
+
+modelo = lm(numberOfUsers ~ appeared, data = Muestra)
+intercepto = coef(modelo)[1]
+coeficiente = coef(modelo)[2]
+ecuacion = paste("y =", round(intercepto, 2), "+", round(coeficiente, 2), "x")
+
+coef_determinacion = summary(modelo)$r.squared
+
+SCE = sum(modelo$residuals^2)
+
+SCR = sum((predict(modelo) - mean(Muestra$appeared))^2)
+
+variabilidad = SCE/(n-2)
+
+
+tabla <- data.frame(
+  Estadisticos = c("Modelo","Covarianza", "Correlacion", "Coefiente de determinacion", "SCE", "SCR", "Varibilidad total"),
+  Valores = c(ecuacion ,covar_xy, correlacion_xy, coef_determinacion, SCE, SCR, variabilidad)
+)
+
+# Crear la tabla con DT::datatable
+datatable(data = tabla[, c("Estadisticos", "Valores")],
+          extensions = 'Scroller',
+          options = list(dom = 'tp',  
+                         class = 'stripe compact hover cell-border'))
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LAST_ACTIVITY - NUMBER OF USERS{data-navmenu="Analisis bivariado"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Dispersion
+```{r}
+
+dispersion = ggplot(Muestra, aes(x = lastActivity , y = numberOfUsers)) +
+              geom_point() +
+              geom_smooth(method = "lm", se = F, color = "dodgerblue") +
+              labs(title = "Grafico de dispersion lastActivity vs numberOfUsers", x = "LAST ACTIVITY", y = "NUMBER OF USERS")+
+              theme(plot.title = element_text(hjust = 0.5))+scale_y_log10()
+  
+fig <- ggplotly(dispersion)
+fig
+
+```
+
+
+### Residuos Estandarizados
+
+```{r}
+
+modelo <- lm(numberOfUsers ~ lastActivity, data = Muestra)
+residuos2 <- scale(resid(modelo))
+
+RE=ggplot() +
+    geom_point(aes(x = Muestra$lastActivity, y = residuos2)) +
+    geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+    labs(title = "Gráfico de residuos estandarizados", x = "LAST ACTIVITY", y = "Residuos Estandarizados")+
+    theme(plot.title = element_text(hjust = 0.5))+ylim(-20, 20)
+
+ggplotly(RE)
+```
+
+
+### Q-Q
+
+```{r}
+modelo <- lm(numberOfUsers ~ lastActivity, data = Muestra)
+residuos <- resid(modelo)
+
+qqAPP <- ggplot(data = NULL, aes(sample = residuos)) +
+  stat_qq(color = '#7AC5CD') +
+  stat_qq_line() +
+  labs(title = "Gráfico Q-Q de residuos", x = "Theorical Quantiles", y = "Sample Quantiles") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(qqAPP)
+
+```
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+
+* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+
+ 
+### Estadisticos
+```{r}
+
+covar_xy = cov(Muestra$lastActivity, Muestra$numberOfUsers)
+
+correlacion_xy = cor(Muestra$lastActivity, Muestra$numberOfUsers)
+
+modelo = lm(numberOfUsers ~ lastActivity, data = Muestra)
+intercepto = coef(modelo)[1]
+coeficiente = coef(modelo)[2]
+ecuacion = paste("y =", round(intercepto, 2), "+", round(coeficiente, 2), "x")
+
+coef_determinacion = summary(modelo)$r.squared
+
+SCE = sum(modelo$residuals^2)
+
+SCR = sum((predict(modelo) - mean(Muestra$lastActivity))^2)
+
+variabilidad = SCE/(n-2)
+
+
+tabla <- data.frame(
+  Estadisticos = c("Modelo","Covarianza", "Correlacion", "Coefiente de determinacion", "SCE", "SCR", "Varibilidad total"),
+  Valores = c(ecuacion ,covar_xy, correlacion_xy, coef_determinacion, SCE, SCR, variabilidad)
+)
+
+# Crear la tabla con DT::datatable
+datatable(data = tabla[, c("Estadisticos", "Valores")],
+          extensions = 'Scroller',
+          options = list(dom = 'tp',  
+                         class = 'stripe compact hover cell-border'))
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+APPEARED - TYPE{data-navmenu="Analisis bivariado"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Boxplots
+```{r}
+set.seed(00065280)
+df <- data.frame(y = Muestra$appeared,
+                 TYPE = sample(Muestra$type))
+
+BX =ggplot(df, aes(x = TYPE, y = y, fill = TYPE)) + 
+      stat_boxplot(geom = "errorbar", # Error bars
+               width = 0.25) +    # Bars width
+      geom_boxplot()+
+      theme(axis.text.x = element_blank())+
+      labs(title = "Boxplots type vs appeared", y = "APPEARED")+
+      theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(BX)
+
+```
+
+
+### Beeswarm
+
+```{r}
+
+set.seed(00065280)
+df <- data.frame(y = Muestra$appeared,
+                 TYPE = sample(Muestra$type))
+
+BX =ggplot(df, aes(x = TYPE, y = y, fill = TYPE)) + 
+  geom_beeswarm()+
+  theme(axis.text.x = element_blank())+
+  labs(title = "Beeswarn type vs appeared", y = "APPEARED")+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+
+ggplotly(BX)
+```
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+
+* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+
+ 
+### Estadisticos
+```{r}
+DT::datatable(data = Muestra[, c(1, 2, 3)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LAST_ACTIVITY - TYPE{data-navmenu="Analisis bivariado"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Boxplots
+```{r}
+set.seed(00065280)
+df <- data.frame(y = Muestra$lastActivity,
+                 TYPE = sample(Muestra$type))
+
+BX =ggplot(df, aes(x = TYPE, y = y, fill = TYPE)) + 
+      stat_boxplot(geom = "errorbar", # Error bars
+               width = 0.25) +    # Bars width
+      geom_boxplot()+
+      theme(axis.text.x = element_blank())+
+      labs(title = "Boxplots type vs lastActivity", y = "LAST ACTIVITY")+
+      theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(BX)
+
+```
+
+
+### Beeswarm
+
+```{r}
+
+set.seed(00065280)
+df <- data.frame(y = Muestra$lastActivity,
+                 TYPE = sample(Muestra$type))
+
+BX =ggplot(df, aes(x = TYPE, y = y, fill = TYPE)) + 
+  geom_beeswarm(cex = 0.1)+
+  theme(axis.text.x = element_blank())+
+  labs(title = "Beeswarm type vs lastActivity", y = "LAST ACTIVITY")+
+      theme(plot.title = element_text(hjust = 0.5))
+
+
+ggplotly(BX)
+```
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+
+* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+
+ 
+### Estadisticos
+```{r}
+DT::datatable(data = Muestra[, c(1, 4, 3)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NUMBER OF USERS - TYPE{data-navmenu="Analisis bivariado"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Boxplots
+```{r}
+set.seed(00065280)
+df <- data.frame(y = Muestra$numberOfUsers,
+                 TYPE = sample(Muestra$type))
+
+BX =ggplot(df, aes(x = TYPE, y = y, fill = TYPE)) + 
+      stat_boxplot(geom = "errorbar", # Error bars
+               width = 0.25) +    # Bars width
+      geom_boxplot()+
+      theme(axis.text.x = element_blank())+
+      labs(title = "Boxplots type vs numberOfUsers", y = "NUMBER OF USERS")+
+      theme(plot.title = element_text(hjust = 0.5))+ ylim(-12000,600000)
+
+ggplotly(BX)
+
+```
+### Boxplots escala log10
+```{r}
+set.seed(00065280)
+df <- data.frame(y = Muestra$numberOfUsers,
+                 TYPE = sample(Muestra$type))
+
+BX =ggplot(df, aes(x = TYPE, y = y, fill = TYPE)) + 
+      stat_boxplot(geom = "errorbar", # Error bars
+               width = 0.25) +    # Bars width
+      geom_boxplot()+
+      theme(axis.text.x = element_blank())+
+      labs(title = "Boxplots type vs numberOfUsers escala log10", y = "NUMBER OF USERS")+
+      theme(plot.title = element_text(hjust = 0.5))+scale_y_log10()
+
+ggplotly(BX)
+
+```
+
+### Beeswarm
+```{r}
+
+set.seed(00065280)
+df <- data.frame(y = Muestra$numberOfUsers,
+                 TYPE = sample(Muestra$type))
+
+BX =ggplot(df, aes(x = TYPE, y = y, fill = TYPE)) + 
+  geom_beeswarm(cex = 0.1)+
+  theme(axis.text.x = element_blank())+
+  labs(title = "Beeswarm type vs numberOFUsers", y = "NUMBER OF USERS")+
+  theme(plot.title = element_text(hjust = 0.5))+ylim(-12000,6000000)
+
+
+ggplotly(BX)
+```
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+
+* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+
+ 
+### Estadisticos
+```{r}
+DT::datatable(data = Muestra[, c(1, 5, 3)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NUMBER OF USERS - COUNTRY{data-navmenu="Analisis bivariado"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Boxplots
+```{r}
+set.seed(00065280)
+df <- data.frame(y = Muestra$numberOfUsers,
+                 COUNTRY = sample(Muestra$country))
+
+BX =ggplot(df, aes(x = COUNTRY, y = y, fill = COUNTRY)) + 
+      stat_boxplot(geom = "errorbar", # Error bars
+               width = 0.25) +    # Bars width
+      geom_boxplot()+
+      theme(axis.text.x = element_blank())+
+      labs(title = "Boxplots country vs numberOfUsers", y = "NUMBER OF USERS")+
+      theme(plot.title = element_text(hjust = 0.5))+ ylim(-12000,600000)
+
+ggplotly(BX)
+
+```
+### Boxplots escala log10
+```{r}
+set.seed(00065280)
+df <- data.frame(y = Muestra$numberOfUsers,
+                 COUNTRY = sample(Muestra$country))
+
+BX =ggplot(df, aes(x = COUNTRY, y = y, fill = COUNTRY)) + 
+      stat_boxplot(geom = "errorbar", # Error bars
+               width = 0.25) +    # Bars width
+      geom_boxplot()+
+      theme(axis.text.x = element_blank())+
+      labs(title = "Boxplots country vs numberOfUsers escala log10", y = "NUMBER OF USERS")+
+      theme(plot.title = element_text(hjust = 0.5))+scale_y_log10()
+
+ggplotly(BX)
+
+```
+
+### Beeswarm
+```{r}
+
+set.seed(00065280)
+df <- data.frame(y = Muestra$numberOfUsers,
+                 COUNTRY = sample(Muestra$country))
+
+BX =ggplot(df, aes(x = COUNTRY, y = y, fill = COUNTRY)) + 
+  geom_beeswarm(cex = 0.1)+
+  theme(axis.text.x = element_blank())+
+  labs(title = "Beeswarm country vs numberOfUsers", y = "NUMBER OF USERS")+
+  theme(plot.title = element_text(hjust = 0.5))+ylim(-12000,6000000)
+
+
+ggplotly(BX)
+```
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+
+* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+
+ 
+### Estadisticos
+```{r}
+DT::datatable(data = Muestra[, c(1, 7, 5)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LAST_ACTIVITY - COUNTRY{data-navmenu="Analisis bivariado"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Boxplots
+```{r}
+set.seed(00065280)
+df <- data.frame(y = Muestra$lastActivity,
+                 COUNTRY = sample(Muestra$country))
+
+BX =ggplot(df, aes(x = COUNTRY, y = y, fill = COUNTRY)) + 
+      stat_boxplot(geom = "errorbar", # Error bars
+               width = 0.25) +    # Bars width
+      geom_boxplot()+
+      theme(axis.text.x = element_blank())+
+      labs(title = "Boxplots country vs lastActivity", y = "LAST_ACTIVITY")+
+      theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(BX)
+
+```
+### Beeswarm
+```{r}
+
+set.seed(00065280)
+df <- data.frame(y = Muestra$lastActivity,
+                 COUNTRY = sample(Muestra$country))
+
+BX =ggplot(df, aes(x = COUNTRY, y = y, fill = COUNTRY)) + 
+  geom_beeswarm(cex = 0.1)+
+  theme(axis.text.x = element_blank())+
+  labs(title = "Beeswarm country vs lastActivity", y = "LAST_ACTIVITY")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+ggplotly(BX)
+```
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+
+* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+
+ 
+### Estadisticos
+```{r}
+DT::datatable(data = Muestra[, c(1, 7, 4)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+APPEARED - COUNTRY{data-navmenu="Analisis bivariado"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Boxplots
+```{r}
+set.seed(00065280)
+df <- data.frame(y = Muestra$appeared,
+                 COUNTRY = sample(Muestra$country))
+
+BX =ggplot(df, aes(x = COUNTRY, y = y, fill = COUNTRY)) + 
+      stat_boxplot(geom = "errorbar", # Error bars
+               width = 0.25) +    # Bars width
+      geom_boxplot()+
+      theme(axis.text.x = element_blank())+
+      labs(title = "Boxplots country vs appeared", y = "APPEARED")+
+      theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(BX)
+
+```
+### Beeswarm
+```{r}
+
+set.seed(00065280)
+df <- data.frame(y = Muestra$appeared,
+                 COUNTRY = sample(Muestra$country))
+
+BX =ggplot(df, aes(x = COUNTRY, y = y, fill = COUNTRY)) + 
+  geom_beeswarm(cex = 0.5)+
+  theme(axis.text.x = element_blank())+
+  labs(title = "Beeswarm country vs appeared", y = "APPEARED")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+ggplotly(BX)
+```
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+
+* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+
+ 
+### Estadisticos
+```{r}
+DT::datatable(data = Muestra[, c(1, 7, 2)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+APPEARED - WEBSITE{data-navmenu="Analisis bivariado"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Boxplots
+```{r}
+set.seed(00065280)
+df <- data.frame(y = Muestra$appeared,
+                 WEBSITE = sample(Muestra$website))
+
+BX =ggplot(df, aes(x = WEBSITE, y = y, fill = WEBSITE)) + 
+      stat_boxplot(geom = "errorbar", # Error bars
+               width = 0.25) +    # Bars width
+      geom_boxplot()+
+      theme(axis.text.x = element_blank())+
+      labs(title = "Boxplots website vs appeared", y = "APPEARED")+
+      theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(BX)
+
+```
+### Beeswarm
+```{r}
+
+set.seed(00065280)
+df <- data.frame(y = Muestra$appeared,
+                 WEBSITE = sample(Muestra$website))
+
+BX =ggplot(df, aes(x = WEBSITE, y = y, fill = WEBSITE)) + 
+  geom_beeswarm(cex = 0.5)+
+  labs(title = "Beeswarm website vs appeared", y = "APPEARED")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+ggplotly(BX)
+```
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+
+* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+
+ 
+### Estadisticos
+```{r}
+DT::datatable(data = Muestra[, c(1, 6, 2)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LAST_ACTIVITY - WEBSITE{data-navmenu="Analisis bivariado"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Boxplots
+```{r}
+set.seed(00065280)
+df <- data.frame(y = Muestra$lastActivity,
+                 WEBSITE = sample(Muestra$website))
+
+BX =ggplot(df, aes(x = WEBSITE, y = y, fill = WEBSITE)) + 
+      stat_boxplot(geom = "errorbar", # Error bars
+               width = 0.25) +    # Bars width
+      geom_boxplot()+
+      theme(axis.text.x = element_blank())+
+      labs(title = "Boxplots website vs lastActivity", y = "LAST_ACTIVITY")+
+      theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(BX)
+
+```
+### Beeswarm
+```{r}
+
+set.seed(00065280)
+df <- data.frame(y = Muestra$lastActivity,
+                 WEBSITE = sample(Muestra$website))
+
+BX =ggplot(df, aes(x = WEBSITE, y = y, fill = WEBSITE)) + 
+  geom_beeswarm(cex = 0.2)+
+  labs(title = "Beeswarm website vs lastActivity", y = "LAST_ACTIVITY")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+ggplotly(BX)
+```
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+
+* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+
+ 
+### Estadisticos
+```{r}
+DT::datatable(data = Muestra[, c(1, 6, 4)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NUMBER OF USERS - WEBSITE{data-navmenu="Analisis bivariado"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### Boxplots
+```{r}
+set.seed(00065280)
+df <- data.frame(y = Muestra$numberOfUsers,
+                 WEBSITE = sample(Muestra$website))
+
+BX =ggplot(df, aes(x = WEBSITE, y = y, fill = WEBSITE)) + 
+      stat_boxplot(geom = "errorbar", # Error bars
+               width = 0.25) +    # Bars width
+      geom_boxplot()+
+      theme(axis.text.x = element_blank())+
+      labs(title = "Boxplots website vs numberOfUsers", y = "NUMBER OF USERS")+
+      theme(plot.title = element_text(hjust = 0.5))
+
+ggplotly(BX)
+
+```
+### Boxplots escala log10
+```{r}
+set.seed(00065280)
+df <- data.frame(y = Muestra$numberOfUsers,
+                 WEBSITE = sample(Muestra$website))
+
+BX =ggplot(df, aes(x = WEBSITE, y = y, fill = WEBSITE)) + 
+      stat_boxplot(geom = "errorbar", # Error bars
+               width = 0.25) +    # Bars width
+      geom_boxplot()+
+      theme(axis.text.x = element_blank())+
+      labs(title = "Boxplots website vs numberOfUsers escala log10", y = "NUMBER OF USERS")+
+      theme(plot.title = element_text(hjust = 0.5))+scale_y_log10()
+
+ggplotly(BX)
+
+```
+
+
+### Beeswarm
+```{r}
+
+set.seed(00065280)
+df <- data.frame(y = Muestra$numberOfUsers,
+                 WEBSITE = sample(Muestra$website))
+
+BX =ggplot(df, aes(x = WEBSITE, y = y, fill = WEBSITE)) + 
+  geom_beeswarm(cex = 0.01)+
+  labs(title = "Beeswarm website vs numberOfUsers", y = "NUMBER OF USERS")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+ggplotly(BX)
+```
+
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+
+* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+
+* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+
+ 
+### Estadisticos
+```{r}
+DT::datatable(data = Muestra[, c(1, 6, 5)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
