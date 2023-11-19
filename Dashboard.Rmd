@@ -856,31 +856,6 @@ datatable(data = tabla[, c("Estadisticos", "Valores")],
 
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 LAST_ACTIVITY - NUMBER OF USERS{data-navmenu="Analisis bivariado"}
 =======================
 Rows {data-width=600, .tabset}
@@ -981,31 +956,6 @@ datatable(data = tabla[, c("Estadisticos", "Valores")],
 
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 APPEARED - TYPE{data-navmenu="Analisis bivariado"}
 =======================
 Rows {data-width=600, .tabset}
@@ -1067,31 +1017,6 @@ DT::datatable(data = Muestra[, c(1, 2, 3)],
                              class = 'stripe compact hover cell-border'))
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 LAST_ACTIVITY - TYPE{data-navmenu="Analisis bivariado"}
@@ -1256,31 +1181,6 @@ DT::datatable(data = Muestra[, c(1, 5, 3)],
                              class = 'stripe compact hover cell-border'))
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 NUMBER OF USERS - COUNTRY{data-navmenu="Analisis bivariado"}
