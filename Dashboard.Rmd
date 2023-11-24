@@ -16,6 +16,7 @@ library(plotly)
 library(knitr)
 library(DT)
 library(ggbeeswarm)
+library(kableExtra)
 
 
 Data <- read_excel("Data.xlsx")
@@ -654,107 +655,6 @@ Rows {data-width=750}
 
 
 
-APPEARED - LAST_ACTIVITY{data-navmenu="Analisis bivariado"}
-=======================
-
-Rows {data-width=600, .tabset}
------------------------------------------------------------------------
-### Dispersion
-```{r}
-
-dispersion = ggplot(Muestra, aes(x = lastActivity , y = appeared)) +
-              geom_point() +
-              geom_smooth(method = "lm", se = F, color = "dodgerblue") +
-              labs(title = "Grafico de dispersion lastActivity vs appeared", x = "LAST ACTIVITY", y = "APPEARED")+
-              theme(plot.title = element_text(hjust = 0.5))
-  
-fig <- ggplotly(dispersion)
-fig
-
-```
-
-
-### Residuos Estandarizados
-
-```{r}
-
-modelo <- lm(appeared ~ lastActivity, data = Muestra)
-residuos2 <- scale(resid(modelo))
-
-RE=ggplot() +
-    geom_point(aes(x = Muestra$appeared, y = residuos2)) +
-    geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
-    labs(title = "Gráfico de residuos estandarizados", x = "APPEARED", y = "Residuos Estandarizados")+
-    theme(plot.title = element_text(hjust = 0.5))
-
-ggplotly(RE)
-```
-
-
-### Q-Q
-
-```{r}
-modelo <- lm(appeared  ~ lastActivity, data = Muestra)
-residuos <- resid(modelo)
-
-qqAPP <- ggplot(data = NULL, aes(sample = residuos)) +
-  stat_qq(color = '#7AC5CD') +
-  stat_qq_line() +
-  labs(title = "Gráfico Q-Q de residuos", x = "Theorical Quantiles", y = "Sample Quantiles") +
-  theme(plot.title = element_text(hjust = 0.5))
-
-ggplotly(qqAPP)
-
-```
-
-
-Rows {data-width=400}
----------------
-### Conclusiones
-Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
-
-* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
-
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
-
- 
-### Estadisticos
-```{r}
-
-covar_xy = cov(Muestra$lastActivity, Muestra$appeared)
-
-correlacion_xy = cor(Muestra$lastActivity, Muestra$appeared)
-
-modelo = lm(appeared ~ lastActivity, data = Muestra)
-intercepto = coef(modelo)[1]
-coeficiente = coef(modelo)[2]
-ecuacion = paste("y =", round(intercepto, 2), "+", round(coeficiente, 2), "x")
-
-coef_determinacion = summary(modelo)$r.squared
-
-SCE = sum(modelo$residuals^2)
-
-SCR = sum((predict(modelo) - mean(Muestra$appeared))^2)
-
-variabilidad = SCE/(n-2)
-
-
-tabla <- data.frame(
-  Estadisticos = c("Modelo","Covarianza", "Correlacion", "Coefiente de determinacion", "SCE", "SCR", "Varibilidad total"),
-  Valores = c(ecuacion ,covar_xy, correlacion_xy, coef_determinacion, SCE, SCR, variabilidad)
-)
-
-# Crear la tabla con DT::datatable
-datatable(data = tabla[, c("Estadisticos", "Valores")],
-          extensions = 'Scroller',
-          options = list(dom = 'tp',  
-                         class = 'stripe compact hover cell-border'))
-
-
-
-
-```
-
 APPEARED - NUMBER OF USERS{data-navmenu="Analisis bivariado"}
 =======================
 
@@ -812,11 +712,11 @@ ggplotly(qqAPP)
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+Luego de realizar la graficas nos podemos dar cuenta que la variable appeared se comporta como categorica, por lo que no tendria sentido analizar los estadisticos para verificar su dependencia, sin embargo con fines de estudio, verificacion y practica, a partir de los estadisticos podemos conlcuir lo siguiente
 
-* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+* Tanto la suma de los errores como la variabilidad del modelo es muy alta, lo cual indica independencia entre las variables
 
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+* La correlación es −0.0113942352910447, muy cercana a cero, lo que sugiere una relación muy débil o casi inexistente entre las variables
 
  
 ### Estadisticos
@@ -912,11 +812,11 @@ ggplotly(qqAPP)
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+Luego de realizar la graficas nos podemos dar cuenta que la variable lastactivity se comporta como categorica, por lo que no tendria sentido analizar los estadisticos para verificar su dependencia, sin embargo con fines de estudio, verificacion y practica, a partir de los estadisticos podemos conlcuir lo siguiente
 
-* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+* Tanto la suma de los errores como la variabilidad del modelo es muy alta, lo cual indica independencia entre las variables
 
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+* La correlación es 	0.0559661030339999, muy cercana a cero, lo que sugiere una relación muy débil o casi inexistente entre las variables
 
  
 ### Estadisticos
@@ -1002,11 +902,9 @@ ggplotly(BX)
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, podriamos afrimar que:
 
-* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
-
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+* los tipos de tecnologia que tienen mas rango de apariciones son las de: "pl", "querylanguaje" y "xmlformat"
 
  
 ### Estadisticos
@@ -1066,9 +964,9 @@ Rows {data-width=400}
 ### Conclusiones
 Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
 
-* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
+* Hay un amplio rango de años de actividad para los diferentes tipos de software, con algunos tipos que tienen un nivel de actividad mediano más alto que otros.
 
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+* Los tipos de software con los niveles de actividad medianos más altos son “pl” y “protocol”.
 
  
 ### Estadisticos
@@ -1166,11 +1064,9 @@ ggplotly(BX)
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+la variable numbeofUsers presenta una gran variabilidad por lo cual los boxplot a escala normal se vel muy pequeños, sin embargo, usando la escala log10 podriamos afirmar que:
 
-* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
-
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+* la tecnologia que tiene mas usuarios es alguna de tipo "pl"
 
  
 ### Estadisticos
@@ -1243,12 +1139,9 @@ ggplotly(BX)
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+la variable numbeofUsers presenta una gran variabilidad por lo cual los boxplot a escala normal se ven muy pequeños, sin embargo, usando la escala log10 podriamos afirmar que:
 
-* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
-
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
-
+* el pais que tiene la tecnologia con mas usuarios es United states
  
 ### Estadisticos
 ```{r}
@@ -1327,11 +1220,9 @@ ggplotly(BX)
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+A partir de grafico boxplot con categorias podriamos afirmar que
 
-* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
-
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+* el pais de la tecnologia que menos se actualiza es "Unknow"
 
  
 ### Estadisticos
@@ -1411,11 +1302,9 @@ ggplotly(BX)
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, podemos afirmar que:
 
-* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
-
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+* los paises que han producido tecnologias de 1960 hasta 2022 son: "United States" y "United Kingdom"
 
  
 ### Estadisticos
@@ -1494,11 +1383,9 @@ ggplotly(BX)
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, podemos afirmar que:
 
-* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
-
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+* El valor mediano para el grupo “YES” es igual que el valor mediano para el grupo “NO”.
 
  
 ### Estadisticos
@@ -1577,11 +1464,9 @@ ggplotly(BX)
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+Realizando una analisis de las graficas podemos afirmar que:
 
-* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
-
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+* Tanto YES como NO tiene el mismo rango de valores
 
  
 ### Estadisticos
@@ -1592,30 +1477,6 @@ DT::datatable(data = Muestra[, c(1, 6, 4)],
                              class = 'stripe compact hover cell-border'))
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1679,11 +1540,9 @@ ggplotly(BX)
 Rows {data-width=400}
 ---------------
 ### Conclusiones
-Basándonos en las gráficas y lo que hemos estudiado en nuestro curso de Estadística Inferencial, parece que las muestras no se ajustan a una distribución normal, debido a que:
+Realizando una analisis de las graficas podemos afirmar que:
 
-* El histograma presenta asimetría y un sesgo hacia la derecha, lo que sugiere una distribución no normal. Este patrón de desviación se refleja de manera consistente en los gráficos de densidad, proporcionando una indicación adicional de la falta de normalidad en los datos."
-
-* Igualmente el grafico Q-Q muestra colas tanto izquierda como derechas, lo cual  indica que hay valores por encima de los cuantiles -2 y 2, lo cual es otro indicio de la no normalidad de los datos
+* la tecnologia que mas tiene ususarios no tiene sitio web propio
 
  
 ### Estadisticos
@@ -1720,3 +1579,195 @@ DT::datatable(data = Muestra[, c(1, 6, 5)],
 
 
 
+
+TYPE - COUNTRY{data-navmenu="Analisis bivariado"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### tabla de contingencia
+```{r}
+tabla_type_country <- table(Muestra$type, Muestra$country)
+kable(tabla_type_country)
+
+```
+
+### Gráfico de Barras: Tipo por País
+```{r}
+
+# Supongamos que ya tienes la tabla generada
+tabla_type_country <- table(Muestra$type, Muestra$country)
+
+# Convertimos la tabla a un dataframe
+df <- as.data.frame.matrix(tabla_type_country)
+
+# Añadimos una columna con los tipos
+df$type <- rownames(df)
+
+# Transformamos los datos a formato largo para ggplot2
+df_long <- tidyr::gather(df, key = "Country", value = "Count", -type)
+
+# Creamos el gráfico de barras
+x = ggplot(df_long, aes(x = type, y = Count, fill = Country)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Gráfico de Barras: Tipo por País", x = "Type", y = "Cantidad") +
+  theme_minimal()+scale_y_log10()+theme(axis.text.x = element_blank())
+
+ggplotly(x)
+
+```
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Para probar la dependencia entre las dos variables categoricas debemos realizar la prueba ji cuadrada la cual nos dio el siguiente resultado:
+```{r}
+tabla_contingencia <- table(Muestra$type, Muestra$country)
+
+# Realizar la prueba de Chi-Cuadrado
+resultado_chi_cuadrado <- chisq.test(tabla_contingencia)
+
+# Imprimir el resultado
+print(resultado_chi_cuadrado)
+
+```
+Con este resultado rechazamos la hipotesis nula de que no hay diferencias significativas en la distribución de género entre los dos grupos.
+
+
+
+ 
+### Estadisticos
+```{r}
+DT::datatable(data = Muestra[, c(1, 3, 7)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
+
+```
+
+
+WEBSITE - TYPE{data-navmenu="Analisis bivariado"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### tabla de contingencia
+```{r}
+tabla_type_country <- table(Muestra$type, Muestra$website)
+kable(tabla_type_country)
+
+```
+
+### Gráfico de Barras: Tipo por País
+```{r}
+
+# Supongamos que ya tienes la tabla generada
+tabla_type_country <- table(Muestra$website, Muestra$type)
+
+# Convertimos la tabla a un dataframe
+df <- as.data.frame.matrix(tabla_type_country)
+
+# Añadimos una columna con los tipos
+df$type <- rownames(df)
+
+# Transformamos los datos a formato largo para ggplot2
+df_long <- tidyr::gather(df, key = "Country", value = "Count", -type)
+
+# Creamos el gráfico de barras
+x = ggplot(df_long, aes(x = type, y = Count, fill = Country)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Gráfico de Barras: Tipo por tecnologia", x = "Website", y = "Cantidad") +
+  theme_minimal()+scale_y_log10()
+
+ggplotly(x)
+
+```
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Para probar la dependencia entre las dos variables categoricas debemos realizar la prueba ji cuadrada la cual nos dio el siguiente resultado:
+```{r}
+tabla_contingencia <- table(Muestra$website, Muestra$type)
+
+# Realizar la prueba de Chi-Cuadrado
+resultado_chi_cuadrado <- chisq.test(tabla_contingencia)
+
+# Imprimir el resultado
+print(resultado_chi_cuadrado)
+
+```
+Con este resultado rechazamos la hipotesis nula de que no hay diferencias significativas en la distribución de género entre los dos grupos.
+
+
+
+ 
+### Estadisticos
+```{r}
+DT::datatable(data = Muestra[, c(1, 3, 6)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
+
+```
+COUNTRY - WEBSITE{data-navmenu="Analisis bivariado"}
+=======================
+Rows {data-width=600, .tabset}
+-----------------------------------------------------------------------
+### tabla de contingencia
+```{r}
+tabla_type_country <- table(Muestra$country, Muestra$website)
+kable(tabla_type_country)
+
+```
+
+### Gráfico de Barras: Tipo por País
+```{r}
+
+# Supongamos que ya tienes la tabla generada
+tabla_type_country <- table(Muestra$website, Muestra$country)
+
+# Convertimos la tabla a un dataframe
+df <- as.data.frame.matrix(tabla_type_country)
+
+# Añadimos una columna con los tipos
+df$type <- rownames(df)
+
+# Transformamos los datos a formato largo para ggplot2
+df_long <- tidyr::gather(df, key = "Country", value = "Count", -type)
+
+# Creamos el gráfico de barras
+x = ggplot(df_long, aes(x = type, y = Count, fill = Country)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Gráfico de Barras: Tipo por País", x = "Website", y = "Cantidad") +
+  theme_minimal()+scale_y_log10()
+
+ggplotly(x)
+
+```
+
+Rows {data-width=400}
+---------------
+### Conclusiones
+Para probar la dependencia entre las dos variables categoricas debemos realizar la prueba ji cuadrada la cual nos dio el siguiente resultado:
+```{r}
+tabla_contingencia <- table(Muestra$website, Muestra$country)
+
+# Realizar la prueba de Chi-Cuadrado
+resultado_chi_cuadrado <- chisq.test(tabla_contingencia)
+
+# Imprimir el resultado
+print(resultado_chi_cuadrado)
+
+```
+Con este resultado rechazamos la hipotesis nula de que no hay diferencias significativas en la distribución de género entre los dos grupos.
+
+
+
+ 
+### Estadisticos
+```{r}
+DT::datatable(data = Muestra[, c(1, 7, 6)], 
+              extensions = 'Scroller',
+              options = list(dom='tp',  
+                             class = 'stripe compact hover cell-border'))
+
+```
